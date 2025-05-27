@@ -36,3 +36,32 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+})->name('dashboard');
+
+Route::get('/admin/student', function () {
+    return view('admin.studentRegistForm');
+})->name('students.create');
+
+Route::get('/admin/master', function () {
+    return view('admin.master-data');
+})->name('master-data.index');
+
+Route::get('/admin/iq', function () {
+    return view('admin.iq-test');
+})->name('iq-tests.index');
+
+Route::get('/admin/parent-income', function () {
+    return view('admin.parentIncomeForm');
+})->name('parent-income.index');
+
+Route::get('/admin/student-relation', function () {
+    return view('admin.studentRelationForm');
+})->name('student-relation.index');
+
+Route::get('/admin/student-achievement', function () {
+    return view('admin.studentAchievementForm');
+})->name('student-achievement.index');
+
