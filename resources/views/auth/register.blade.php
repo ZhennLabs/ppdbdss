@@ -79,14 +79,13 @@
         <div class="form-container">
             <form action="{{ route('register.submit') }}" method="POST" id="register-form">
                 @csrf
-                <input type="hidden" name="role" value="user">
                 <div class="mb-2">
                     <label for="name" class="block text-gray-700 font-medium mb-1">Nama Lengkap</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <i class="fas fa-user text-blue-500"></i>
                         </span>
-                        <input type="text" name="name" id="name" class="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" required>
+                        <input type="text" name="name" id="name" class="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" value="{{ old('name') }}" required>
                     </div>
                 </div>
                 <div class="mb-2">
@@ -95,7 +94,16 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <i class="fas fa-user-circle text-blue-500"></i>
                         </span>
-                        <input type="text" name="username" id="username" class="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" required>
+                        <input type="text" name="username" id="username" class="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" value="{{ old('username') }}" required>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fas fa-envelope text-blue-500"></i>
+                        </span>
+                        <input type="email" name="email" id="email" class="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" value="{{ old('email') }}" required>
                     </div>
                 </div>
                 <div class="mb-2">
@@ -127,6 +135,25 @@
     </div>
 
     <script>
+        @if (session('success'))
+            Swal.fire({
+                toast: true,
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                position: 'top-end',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                color: '#ffffff',
+                background: '#4682B4',
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+        @endif
+
         @if ($errors->any())
             Swal.fire({
                 toast: true,
@@ -147,4 +174,4 @@
         @endif
     </script>
 </body>
-</html> 
+</html>

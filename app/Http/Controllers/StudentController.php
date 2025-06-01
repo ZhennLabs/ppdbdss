@@ -6,9 +6,16 @@ use App\Models\Student;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller as BaseController;
 
-class StudentController extends Controller
+class StudentController extends BaseController
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['create', 'store']);
+        $this->middleware('role:user')->only(['create', 'store']);
+    }
+
     public function create()
     {
         return view('students.create');

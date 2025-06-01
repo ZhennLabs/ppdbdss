@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return redirect()->route('home');
@@ -21,7 +22,7 @@ Route::middleware(['guest'])->group(function () {
 });
 
 // Rute untuk logout (harus login)
-Route::post('/logout/user', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Rute untuk form pendaftaran PPDB (hanya untuk user yang sudah login)
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -29,6 +30,14 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('/register', [StudentController::class, 'store'])->name('students.store');
 });
 
+// Rute untuk halaman admin (hanya untuk admin yang sudah login)
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/admin/student', [AdminController::class, 'studentCreate'])->name('students.create');
+    Route::get('/admin/master', [AdminController::class, 'masterData'])->name('master-data.index');
+});
+
+// Halaman statis
 Route::get('/about', function () {
     return view('about');
 })->name('about');
@@ -36,32 +45,3 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
-
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->name('dashboard');
-
-Route::get('/admin/student', function () {
-    return view('admin.studentRegistForm');
-})->name('students.create');
-
-Route::get('/admin/master', function () {
-    return view('admin.master-data');
-})->name('master-data.index');
-
-Route::get('/admin/iq', function () {
-    return view('admin.iq-test');
-})->name('iq-tests.index');
-
-Route::get('/admin/parent-income', function () {
-    return view('admin.parentIncomeForm');
-})->name('parent-income.index');
-
-Route::get('/admin/student-relation', function () {
-    return view('admin.studentRelationForm');
-})->name('student-relation.index');
-
-Route::get('/admin/student-achievement', function () {
-    return view('admin.studentAchievementForm');
-})->name('student-achievement.index');
-

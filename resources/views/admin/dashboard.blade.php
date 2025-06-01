@@ -8,7 +8,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500">Total Calon Siswa</p>
-                <h3 class="text-2xl font-bold">1,254</h3>
+                <h3 class="text-2xl font-bold">{{ number_format($totalStudents, 0, ',', '.') }}</h3>
             </div>
             <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,7 +22,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500">Tes IQ Terakhir</p>
-                <h3 class="text-2xl font-bold">120</h3>
+                <h3 class="text-2xl font-bold">{{ number_format($avgIqScore, 0, ',', '.') }}</h3>
                 <p class="text-sm text-gray-500">Rata-rata</p>
             </div>
             <div class="p-3 rounded-full bg-green-100 text-green-600">
@@ -37,7 +37,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500">Penghasilan Orang Tua</p>
-                <h3 class="text-2xl font-bold">Rp 5.2jt</h3>
+                <h3 class="text-2xl font-bold">Rp {{ number_format($avgParentIncome, 0, ',', '.') }}</h3>
                 <p class="text-sm text-gray-500">Rata-rata</p>
             </div>
             <div class="p-3 rounded-full bg-blue-100 text-blue-600">
@@ -52,7 +52,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500">Prestasi Anak</p>
-                <h3 class="text-2xl font-bold">78%</h3>
+                <h3 class="text-2xl font-bold">{{ number_format($achievementPercentage, 0, ',', '.') }}%</h3>
                 <p class="text-sm text-gray-500">Memiliki prestasi</p>
             </div>
             <div class="p-3 rounded-full bg-purple-100 text-purple-600">
@@ -65,37 +65,42 @@
 </div>
 
 <div class="bg-white rounded-lg shadow p-6 mb-6">
-    <h3 class="text-lg font-semibold mb-4">Normalisasi</h3>
+    <h3 class="text-lg font-semibold mb-4">Hasil Perankingan</h3>
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kriteria</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bobot</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Normalisasi</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Peringkat</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skor Akhir</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">Nilai Rata-Rata Tes IQ</td>
-                    <td class="px-6 py-4 whitespace-nowrap">40</td>
-                    <td class="px-6 py-4 whitespace-nowrap">0.4</td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">Penghasilan Orang Tua</td>
-                    <td class="px-6 py-4 whitespace-nowrap">30</td>
-                    <td class="px-6 py-4 whitespace-nowrap">0.3</td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">Status Keuangan Orang Tua</td>
-                    <td class="px-6 py-4 whitespace-nowrap">20</td>
-                    <td class="px-6 py-4 whitespace-nowrap">0.2</td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">Prestasi Anak</td>
-                    <td class="px-6 py-4 whitespace-nowrap">10</td>
-                    <td class="px-6 py-4 whitespace-nowrap">0.1</td>
-                </tr>
+                @forelse ($students as $index => $student)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $student->result->rank ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $student->name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ number_format($student->result->final_score ?? 0, 2) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $student->result->class ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if(isset($student->result->is_passed))
+                                @if($student->result->is_passed)
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Lulus</span>
+                                @else
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Tidak Lulus</span>
+                                @endif
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-gray-500 py-4">Belum ada data perankingan.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

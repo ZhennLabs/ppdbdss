@@ -9,12 +9,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function showLoginForm($role = 'user')
+    public function showLoginForm()
     {
-        if ($role !== 'user') {
-            abort(404);
-        }
-        return view('auth.login', ['role' => $role]);
+        return view('auth.login');
     }
 
     public function showRegisterForm()
@@ -36,7 +33,7 @@ class AuthController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user',
+            'role' => 'user', // Role default adalah 'user'
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
@@ -47,20 +44,19 @@ class AuthController extends Controller
         $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
-            'role' => 'required|in:user',
         ]);
 
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            if ($user->role !== 'user') {
-                Auth::logout();
-                return back()->withErrors(['role' => 'Hanya pengguna dengan role user yang bisa login.']);
-            }
-
             $request->session()->regenerate();
-            return redirect()->route('home')->with('success', 'Login berhasil!');
+            
+            if ($user->role === 'user') {
+                return redirect()->route('home')->with('success', 'Login berhasil!');
+            } elseif ($user->role === 'admin') {
+                return redirect()->route('dashboard')->with('success', 'Login berhasil!');
+            }
         }
 
         return back()->withErrors(['username' => 'Username atau password salah.']);
