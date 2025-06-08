@@ -105,4 +105,68 @@
         </table>
     </div>
 </div>
+
+{{-- Table: Siswa Lulus --}}
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h3 class="text-lg font-semibold mb-4">Siswa Lulus</h3>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Peringkat</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skor Akhir</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @php
+                    $passedStudents = $students->filter(fn($s) => isset($s->result->is_passed) && $s->result->is_passed);
+                @endphp
+                @forelse ($passedStudents as $student)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $student->result->rank ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $student->name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ number_format($student->result->final_score ?? 0, 2) }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center text-gray-500 py-4">Tidak ada siswa yang lulus.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{-- Table: Siswa Tidak Lulus --}}
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h3 class="text-lg font-semibold mb-4">Siswa Tidak Lulus</h3>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Peringkat</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skor Akhir</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @php
+                    $notPassedStudents = $students->filter(fn($s) => isset($s->result->is_passed) && !$s->result->is_passed);
+                @endphp
+                @forelse ($notPassedStudents as $student)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $student->result->rank ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $student->name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ number_format($student->result->final_score ?? 0, 2) }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center text-gray-500 py-4">Tidak ada siswa yang tidak lulus.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

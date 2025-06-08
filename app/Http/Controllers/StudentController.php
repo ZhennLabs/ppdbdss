@@ -7,6 +7,7 @@ use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller as BaseController;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StudentController extends BaseController
 {
@@ -18,7 +19,8 @@ class StudentController extends BaseController
 
     public function create()
     {
-        return view('students.create');
+        $alreadyRegistered = Student::where('user_id', Auth::id())->exists();
+        return view('students.create', compact('alreadyRegistered'));
     }
 
     public function store(Request $request)
@@ -47,7 +49,13 @@ class StudentController extends BaseController
             'photo' => 'nullable|file|mimes:jpg,png|max:2048',
         ]);
 
-        $student = Student::create(array_merge($validated, ['user_id' => Auth::id()]));
+        $student = Student::create(array_merge(
+            $validated,
+            [
+                'user_id' => Auth::id(),
+                'registration_number' => Student::generateRegistrationNumber(),
+            ]
+        ));
 
         $documents = [
             'birth_certificate' => 'birth_certificate',
@@ -66,6 +74,28 @@ class StudentController extends BaseController
             }
         }
 
-        return redirect()->route('home')->with('success', 'Pendaftaran PPDB berhasil disimpan!');
+        return redirect()
+            ->route('students.create')
+            ->with('registration_number', $student->registration_number);
+    }
+
+    public function registrationSuccess()
+    {
+        $registrationNumber = session('registration_number');
+        if (!$registrationNumber) {
+            return redirect()->route('home');
+        }
+        return view('students.registration-success', compact('registrationNumber'));
+    }
+
+    public function downloadPdf(\App\Models\Student $student)
+    {
+        // Optional: Only allow the owner to download their PDF
+        if ($student->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $pdf = Pdf::loadView('students.pdf', compact('student'));
+        return $pdf->download('bukti-pendaftaran-'.$student->registration_number.'.pdf');
     }
 }

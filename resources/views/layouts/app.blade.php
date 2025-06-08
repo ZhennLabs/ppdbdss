@@ -125,6 +125,12 @@
                     <span>Kontak</span>
                 </a>
             </li>
+            <li class="mb-3">
+                <a href="{{ route('cek.status') }}" class="flex items-center text-white text-lg p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
+                    <i class="fas fa-search mr-3"></i>
+                    <span>Cek Status Kelulusan</span>
+                </a>
+            </li>
         </ul>
     </div>
 
@@ -154,6 +160,10 @@
         <main class="max-w-[1000px] mx-auto mt-8">
             @yield('content')
         </main>
+
+        <div class="w-full">
+            @yield('content2')
+        </div>
 
         <footer class="bg-blue-900 text-white mt-8 py-6">
             <div class="max-w-5xl mx-auto px-4 text-center">

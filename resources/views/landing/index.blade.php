@@ -85,15 +85,15 @@
         <ul class="mt-4 px-4 flex flex-col h-full">
             @if (auth()->check() && auth()->user()->role === 'user')
                 <li class="mb-3">
-                    <a href="/register" class="flex items-center text-white text-lg p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
+                    <a href="/register" class="flex items-center text-white text-lg font-bold p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
                         <i class="fas fa-user-plus mr-3"></i>
-                        <span>Form Pendaftaran</span>
+                        <span class="font-bold">Form Pendaftaran</span>
                     </a>
                 </li>
                 <li class="mb-3">
-                    <a href="#" class="flex items-center text-white text-lg p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <a href="#" class="flex items-center text-white text-lg font-bold p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fas fa-sign-out-alt mr-3"></i>
-                        <span>Logout</span>
+                        <span class="font-bold">Logout</span>
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
@@ -101,28 +101,28 @@
                 </li>
             @else
                 <li class="mb-3">
-                    <a href="{{ route('login') }}" class="flex items-center text-white text-lg p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
+                    <a href="{{ route('login') }}" class="flex items-center text-white text-lg font-bold p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
                         <i class="fas fa-sign-in-alt mr-3"></i>
-                        <span>Login</span>
+                        <span class="font-bold">Login</span>
                     </a>
                 </li>
             @endif
             <li class="mb-3">
-                <a href="/home" class="flex items-center text-white text-lg p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
+                <a href="/home" class="flex items-center text-white text-lg font-bold p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
                     <i class="fas fa-home mr-3"></i>
-                    <span>Beranda</span>
+                    <span class="font-bold">Beranda</span>
                 </a>
             </li>
             <li class="mb-3">
-                <a href="/about" class="flex items-center text-white text-lg p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
+                <a href="/about" class="flex items-center text-white text-lg font-bold p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
                     <i class="fas fa-info-circle mr-3"></i>
-                    <span>Tentang PPDB</span>
+                    <span class="font-bold">Tentang PPDB</span>
                 </a>
             </li>
             <li class="mb-3">
-                <a href="/contact" class="flex items-center text-white text-lg p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
+                <a href="/contact" class="flex items-center text-white text-lg font-bold p-3 rounded-lg hover:bg-white/10 hover:translate-x-1 transition-all duration-200">
                     <i class="fas fa-envelope mr-3"></i>
-                    <span>Kontak</span>
+                    <span class="font-bold">Kontak</span>
                 </a>
             </li>
         </ul>

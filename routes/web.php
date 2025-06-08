@@ -45,3 +45,10 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+Route::get('/students/registration/success', [StudentController::class, 'registrationSuccess'])->name('students.registration.success');
+Route::get('/students/{student}/pdf', [\App\Http\Controllers\StudentController::class, 'downloadPdf'])->name('students.pdf');
+Route::get('/cek-status', function () {
+    return view('students.cek-status');
+})->name('cek.status');
+
+Route::post('/cek-status', [App\Http\Controllers\StatusController::class, 'check'])->name('cek.status.submit');
