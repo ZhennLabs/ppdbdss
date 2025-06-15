@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrasi - PPDB SMA</title>
+    <title>Registrasi - PPDB SMP Perintis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -74,7 +74,7 @@
         <div class="flex justify-center mb-4">
             <img src="{{ asset('assets/images/dinasPendLogo.png') }}" alt="PPDB Logo" class="h-16 w-16">
         </div>
-        <h2 class="text-2xl font-semibold text-blue-900 text-center mb-4">Registrasi - PPDB SMA</h2>
+        <h2 class="text-2xl font-semibold text-blue-900 text-center mb-4">Registrasi - PPDB SMP Perintis</h2>
 
         <div class="form-container">
             <form action="{{ route('register.submit') }}" method="POST" id="register-form">
@@ -95,15 +95,6 @@
                             <i class="fas fa-user-circle text-blue-500"></i>
                         </span>
                         <input type="text" name="username" id="username" class="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" value="{{ old('username') }}" required>
-                    </div>
-                </div>
-                <div class="mb-2">
-                    <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <i class="fas fa-envelope text-blue-500"></i>
-                        </span>
-                        <input type="email" name="email" id="email" class="w-full pl-10 pr-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" value="{{ old('email') }}" required>
                     </div>
                 </div>
                 <div class="mb-2">

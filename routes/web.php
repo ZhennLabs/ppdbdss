@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CriterionController;
+use App\Http\Controllers\ScoreController;
 
 Route::get('/', function () {
     return redirect()->route('home');
@@ -35,6 +37,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/admin/student', [AdminController::class, 'studentCreate'])->name('students.create');
     Route::get('/admin/master', [AdminController::class, 'masterData'])->name('master-data.index');
+    Route::put('/admin/result/{id}/update-status', [\App\Http\Controllers\AdminController::class, 'updateResultStatus'])->name('admin.result.updateStatus');
 });
 
 // Halaman statis
@@ -52,3 +55,5 @@ Route::get('/cek-status', function () {
 })->name('cek.status');
 
 Route::post('/cek-status', [App\Http\Controllers\StatusController::class, 'check'])->name('cek.status.submit');
+Route::resource('criteria', \App\Http\Controllers\CriterionController::class);
+Route::resource('scores', \App\Http\Controllers\ScoreController::class);

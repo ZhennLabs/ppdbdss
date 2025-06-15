@@ -154,7 +154,7 @@
                     <p class="text-sm text-gray-600 mt-2 text-center">Progres Form : <span id="progressPercentage">0</span>%</p>
                 </div>
 
-                <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="registrationForm">
+                <form id="ppdbForm" action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="registrationForm">
                     @csrf
 
                     <!-- Section Content -->
@@ -364,7 +364,6 @@
                         </div>
                     </div>
 
-                    <!-- Tombol Daftar (Hanya Muncul Jika Semua Terisi) -->
                     <div id="submitButton" class="mt-6 hidden">
                         <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                             Daftar
@@ -377,7 +376,7 @@
         <!-- Footer -->
         <footer class="bg-blue-900 text-white mt-8 py-6">
             <div class="max-w-5xl mx-auto px-4 text-center">
-                <p>© 2025 PPDB SMA - Penerimaan Peserta Didik Baru. All rights reserved.</p>
+                <p>© 2025 PPDB SMP Perintis Depok - Penerimaan Peserta Didik Baru. All rights reserved.</p>
                 <div class="mt-4 flex justify-center gap-4">
                     <a href="#" class="text-white hover:text-sky-300"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-white hover:text-sky-300"><i class="fab fa-twitter"></i></a>
@@ -387,7 +386,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript untuk Sidebar, Progress Bar, dan Navigasi -->
     <script>
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const sidebar = document.getElementById('sidebar');
@@ -560,7 +558,10 @@
                 }
             });
 
-            localStorage.setItem(sectionId, JSON.stringify(sectionData));
+            const userId = "{{ auth()->id() }}";
+            const sectionKey = (sectionId) => `${sectionId}_user_${userId}`;
+
+            localStorage.setItem(sectionKey(sectionId), JSON.stringify(sectionData));
             alert('Data section disimpan!');
             updateProgress();
         }
@@ -578,7 +579,10 @@
                 }
             });
 
-            localStorage.removeItem(sectionId);
+            const userId = "{{ auth()->id() }}";
+            const sectionKey = (sectionId) => `${sectionId}_user_${userId}`;
+
+            localStorage.removeItem(sectionKey(sectionId));
             updateProgress();
         }
 
@@ -586,7 +590,9 @@
         window.addEventListener('load', () => {
             sections.forEach(section => {
                 const sectionId = section.id;
-                const savedData = localStorage.getItem(sectionId);
+                const userId = "{{ auth()->id() }}";
+                const sectionKey = (sectionId) => `${sectionId}_user_${userId}`;
+                const savedData = localStorage.getItem(sectionKey);
 
                 if (savedData) {
                     const sectionData = JSON.parse(savedData);
@@ -602,8 +608,66 @@
             updateProgress();
         });
 
-        // Initial progress update
         updateProgress();
+    </script>
+
+    <script>
+        // Ambil user id dari backend
+        const userId = "{{ auth()->id() }}";
+        const sectionKey = (sectionId) => `ppdb_section_${sectionId}_user_${userId}`;
+
+        // Fungsi untuk simpan data section ke localStorage
+        function saveSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const inputs = section.querySelectorAll('input, select, textarea');
+            const sectionData = {};
+
+            inputs.forEach(input => {
+                if (input.type === 'file') {
+                    // File tidak bisa disimpan ke localStorage, hanya nama file saja
+                    sectionData[input.id] = input.files.length > 0 ? input.files[0].name : '';
+                } else {
+                    sectionData[input.id] = input.value;
+                }
+            });
+
+            localStorage.setItem(sectionKey(sectionId), JSON.stringify(sectionData));
+            alert('Data section disimpan!');
+        }
+
+        // Fungsi untuk load data section dari localStorage saat halaman dibuka
+        function loadSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const savedData = localStorage.getItem(sectionKey(sectionId));
+            if (savedData) {
+                const sectionData = JSON.parse(savedData);
+                const inputs = section.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    if (input.type !== 'file' && sectionData[input.id] !== undefined) {
+                        input.value = sectionData[input.id];
+                    }
+                });
+            }
+        }
+
+        // Fungsi untuk reset section dan hapus dari localStorage
+        function resetSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const inputs = section.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type === 'file') {
+                    input.value = '';
+                } else {
+                    input.value = '';
+                }
+            });
+            localStorage.removeItem(sectionKey(sectionId));
+        }
+
+        // Saat halaman dibuka, load semua section
+        window.addEventListener('DOMContentLoaded', function() {
+            ['section1', 'section2', 'section3'].forEach(loadSection);
+        });
     </script>
 </body>
 </html>

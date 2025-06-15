@@ -80,7 +80,7 @@
     <div class="container">
         <div class="header">
             <img src="{{ public_path('assets/images/dinasPendLogo.png') }}" alt="Logo" style="width:70px; margin-bottom:10px;">
-            <h2>Bukti Pendaftaran PPDB SMA</h2>
+            <h2>Bukti Pendaftaran PPDB SMP Perintis Depok</h2>
             <div class="reg-number">
                 {{ $student->registration_number }}
             </div>
@@ -140,7 +140,7 @@
         </table>
         <div class="footer">
             Simpan bukti ini untuk keperluan verifikasi dan informasi selanjutnya.<br>
-            <span style="font-size:0.95em;">PPDB SMA {{ date('Y') }}</span>
+            <span style="font-size:0.95em;">PPDB SMP Perintis Depok {{ date('Y') }}</span>
         </div>
         <div class="signature">
             <div>{{ config('app.name', 'PPDB Online') }}</div>

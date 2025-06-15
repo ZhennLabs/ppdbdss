@@ -38,6 +38,16 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function criteria()
+    {
+        return $this->belongsToMany(
+            \App\Models\Criterion::class,
+            'scores',          
+            'student_id',      
+            'criterion_id'      
+        );
+    }
+
     public static function generateRegistrationNumber()
     {
         do {

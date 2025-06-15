@@ -22,17 +22,26 @@ class AdminController extends Controller
         $service->calculateScores();
 
         $students = Student::with('result')
+            ->whereHas('result')
             ->get()
-            ->sortBy(function ($student) {
-                return $student->result ? $student->result->rank : PHP_INT_MAX;
-            });
+            ->sortBy([
+                fn($a, $b) => $b->result->final_score <=> $a->result->final_score ?: strcmp($a->name, $b->name)
+            ])
+            ->values();
+
+        $rank = 1;
+        foreach ($students as $student) {
+            if ($student->result) {
+                $student->result->rank = $rank++;
+            }
+        }
 
         return view('admin.dashboard', compact('totalStudents', 'avgIqScore', 'avgParentIncome', 'achievementPercentage', 'students'));
     }
 
     public function studentCreate()
     {
-        return view('admin.studentRegistForm');
+       
     }
 
     public function studentIndex()
@@ -120,6 +129,18 @@ class AdminController extends Controller
 
     public function masterData()
     {
-        return view('admin.master-data');
+        $criteria = \App\Models\Criterion::all();
+        $scores = \App\Models\Score::with(['student', 'criterion'])->get();
+        $students = \App\Models\Student::with(['criteria', 'scores', 'result'])->get();
+        return view('admin.master-data', compact('criteria', 'scores', 'students'));
+    }
+
+    public function updateResultStatus(Request $request, $id)
+    {
+        $result = \App\Models\Result::findOrFail($id);
+        $result->is_passed = $request->is_passed;
+        $result->save();
+
+        return back()->with('success', 'Status kelulusan berhasil diubah.');
     }
 }

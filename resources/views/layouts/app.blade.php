@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPDB SMA - @yield('title')</title>
+    <title>PPDB SMP Perintis - @yield('title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.min.css">
@@ -167,7 +167,7 @@
 
         <footer class="bg-blue-900 text-white mt-8 py-6">
             <div class="max-w-5xl mx-auto px-4 text-center">
-                <p>© 2025 PPDB SMA - Penerimaan Peserta Didik Baru. All rights reserved.</p>
+                <p>© 2025 PPDB SMP Perintis Depok - Penerimaan Peserta Didik Baru. All rights reserved.</p>
                 <div class="mt-4 flex justify-center gap-4">
                     <a href="#" class="text-white hover:text-sky-300"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-white hover:text-sky-300"><i class="fab fa-twitter"></i></a>

@@ -90,8 +90,7 @@ class StudentController extends BaseController
 
     public function downloadPdf(\App\Models\Student $student)
     {
-        // Optional: Only allow the owner to download their PDF
-        if ($student->user_id !== auth()->id()) {
+        if ($student->user_id !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
 

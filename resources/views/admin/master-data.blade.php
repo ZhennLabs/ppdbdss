@@ -3,86 +3,266 @@
 @section('title', 'Master Data')
 
 @section('content')
-<div class="bg-white rounded-lg shadow p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-semibold">Master Data</h2>
-        <div class="flex space-x-3">
-            <button class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                Tambah Data
-            </button>
+<div x-data="{ show: null, editId: null }" class="max-w-4xl mx-auto py-8">
+    <h1 class="text-2xl font-bold mb-8">Master Data</h1>
+    <div class="grid grid-cols-3 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+            <div class="text-3xl mb-2">📋</div>
+            <h3 class="text-lg font-bold mb-1">Kelola Kriteria & Bobot</h3>
+            <p class="text-gray-600 text-center mb-4">Tambah, edit, atau hapus kriteria dan atur bobotnya sesuai kebutuhan PPDB.</p>
+            <button @click="show = 'kriteria'; editId = null" class="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Kelola</button>
+        </div>
+        <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+            <div class="text-3xl mb-2">📝</div>
+            <h3 class="text-lg font-bold mb-1">Kelola Nilai</h3>
+            <p class="text-gray-600 text-center mb-4">Input dan ubah nilai siswa untuk setiap kriteria yang tersedia.</p>
+            <button @click="show = 'nilai'; editId = null" class="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Kelola</button>
+        </div>
+        <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+            <div class="text-3xl mb-2">🎓</div>
+            <h3 class="text-lg font-bold mb-1">Kelola Kelulusan</h3>
+            <p class="text-gray-600 text-center mb-4">Ubah status kelulusan siswa.</p>
+            <button @click="show = 'kelulusan'; editId = null" class="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Kelola</button>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Rata-Rata Tes IQ Card -->
-        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <div class="flex items-center mb-3">
-                <div class="p-2 bg-blue-100 rounded-full mr-3">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-medium">Rata-Rata Tes IQ</h3>
-            </div>
-            <p class="text-gray-600 mb-4">Kelola data nilai rata-rata tes IQ calon siswa</p>
-            <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Kelola Data →</a>
+    <div x-show="show === 'kriteria'" class="mb-8" style="display: none;">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Kelola Kriteria & Bobot</h2>
+            <button @click="show = null; editId = null" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">Tutup</button>
         </div>
-
-        <!-- Penghasilan Orang Tua Card -->
-        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <div class="flex items-center mb-3">
-                <div class="p-2 bg-green-100 rounded-full mr-3">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-medium">Penghasilan Orang Tua</h3>
-            </div>
-            <p class="text-gray-600 mb-4">Kelola data penghasilan orang tua calon siswa</p>
-            <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Kelola Data →</a>
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Tambah Kriteria</h2>
+            <form action="{{ route('criteria.store') }}" method="POST" class="flex flex-col md:flex-row gap-4 items-center mb-4">
+                @csrf
+                <input type="text" name="name" placeholder="Nama Kriteria" class="border rounded px-3 py-2 w-full md:w-1/2" required>
+                <input type="number" name="weight" placeholder="Bobot" class="border rounded px-3 py-2 w-full md:w-1/4" step="0.01" min="0" required>
+                <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Simpan</button>
+            </form>
         </div>
-
-        <!-- Relasi Keluarga Card -->
-        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <div class="flex items-center mb-3">
-                <div class="p-2 bg-purple-100 rounded-full mr-3">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-medium">Relasi Keluarga</h3>
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">Tabel Kriteria & Bobot</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Kriteria</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bobot</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($criteria as $c)
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $c->name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $c->weight }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+                                <button @click="editId = 'kriteria-{{ $c->id }}'" class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500">Edit</button>
+                                <form action="{{ route('criteria.destroy', $c) }}" method="POST" onsubmit="return confirm('Yakin hapus?')" style="display:inline">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr x-show="editId === 'kriteria-{{ $c->id }}'" style="display: none;">
+                            <td colspan="3" class="bg-gray-50 px-6 py-4">
+                                <form action="{{ route('criteria.update', $c) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-center">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="text" name="name" value="{{ $c->name }}" class="border rounded px-3 py-2" required>
+                                    <input type="number" name="weight" value="{{ $c->weight }}" class="border rounded px-3 py-2" step="0.01" min="0" required>
+                                    <div class="flex gap-2">
+                                        <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Simpan</button>
+                                        <button type="button" @click="editId = null" class="px-4 py-2 rounded bg-gray-300 text-gray-700 hover:bg-gray-400">Batal</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="text-center text-gray-500 py-4">Belum ada kriteria.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-            <p class="text-gray-600 mb-4">Kelola data hubungan keluarga calon siswa</p>
-            <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Kelola Data →</a>
         </div>
+    </div>
 
-        <!-- Prestasi Anak Card -->
-        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <div class="flex items-center mb-3">
-                <div class="p-2 bg-yellow-100 rounded-full mr-3">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-medium">Prestasi Anak</h3>
-            </div>
-            <p class="text-gray-600 mb-4">Kelola data prestasi yang diraih calon siswa</p>
-            <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Kelola Data →</a>
+    <div x-show="show === 'nilai'" class="mb-8" style="display: none;">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Kelola Nilai</h2>
+            <button @click="show = null; editId = null" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">Tutup</button>
         </div>
-
-        <!-- Kelas Card -->
-        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <div class="flex items-center mb-3">
-                <div class="p-2 bg-red-100 rounded-full mr-3">
-                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-medium">Kelas</h3>
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Tambah Nilai</h2>
+            <form action="{{ route('scores.store') }}" method="POST" class="flex flex-col md:flex-row gap-4 items-center mb-4">
+                @csrf
+                <select name="student_id" class="border rounded px-3 py-2 w-full md:w-1/3" required>
+                    <option value="">Pilih Siswa</option>
+                    @foreach($students as $student)
+    <option value="{{ $student->id }}">{{ $student->name }}</option>
+@endforeach
+                </select>
+                <select name="criterion_id" class="border rounded px-3 py-2 w-full md:w-1/3" required>
+                    <option value="">Pilih Kriteria</option>
+                    @foreach($criteria as $c)
+                        <option value="{{ $c->id }}">{{ $c->name }}</option>
+                    @endforeach
+                </select>
+                <input type="number" name="value" placeholder="Nilai" class="border rounded px-3 py-2 w-full md:w-1/6" min="0" max="100" required>
+                <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Simpan</button>
+            </form>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">Tabel Nilai</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kriteria</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nilai</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($scores as $s)
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $s->student->name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $s->criterion->name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $s->value }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+                                <button @click="editId = 'nilai-{{ $s->id }}'" class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500">Edit</button>
+                                <form action="{{ route('scores.destroy', $s) }}" method="POST" onsubmit="return confirm('Yakin hapus?')" style="display:inline">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr x-show="editId === 'nilai-{{ $s->id }}'" style="display: none;">
+                            <td colspan="4" class="bg-gray-50 px-6 py-4">
+                                <form action="{{ route('scores.update', $s) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-center">
+                                    @csrf
+                                    @method('PUT')
+                                    <select name="student_id" class="border rounded px-3 py-2" required>
+                                        @foreach($students as $student)
+                                            <option value="{{ $student->id }}" @if($student->id == $s->student_id) selected @endif>{{ $student->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <select name="criterion_id" class="border rounded px-3 py-2" required>
+                                        @foreach($criteria as $c)
+                                            <option value="{{ $c->id }}" @if($c->id == $s->criterion_id) selected @endif>{{ $c->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="number" name="value" value="{{ $s->value }}" class="border rounded px-3 py-2" min="0" max="100" required>
+                                    <div class="flex gap-2">
+                                        <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Simpan</button>
+                                        <button type="button" @click="editId = null" class="px-4 py-2 rounded bg-gray-300 text-gray-700 hover:bg-gray-400">Batal</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center text-gray-500 py-4">Belum ada nilai.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-            <p class="text-gray-600 mb-4">Kelola data kelas untuk penempatan siswa</p>
-            <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Kelola Data →</a>
+        </div>
+    </div>
+
+    <div x-show="show === 'kelulusan'" class="mb-8" style="display: none;">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Kelola Kelulusan</h2>
+            <button @click="show = null; editId = null" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">Tutup</button>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">Tabel Kelulusan</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kriteria</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nilai</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Kelulusan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @if(!empty($students))
+                            @foreach($students as $student)
+                            <tr class="hover:bg-gray-100">
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $student->name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @foreach($student->criteria as $criterion)
+                                        <div>{{ $criterion->name }}</div>
+                                    @endforeach
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @foreach($student->scores as $score)
+                                        <div>{{ $score->value }}</div>
+                                    @endforeach
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($student->result)
+
+                                    <form action="{{ route('admin.result.updateStatus', $student->result->id) }}" method="POST" class="flex items-center gap-2">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="is_passed" class="border rounded px-2 py-1">
+                                                <option value="1" {{ $student->result->is_passed ? 'selected' : '' }}>Lulus</option>
+                                                <option value="0" {{ !$student->result->is_passed ? 'selected' : '' }}>Tidak Lulus</option>
+                                            </select>
+                                            <button type="submit" class="bg-blue-600 text-white px-2 py-1 rounded">Simpan</button>
+                                        </form>
+                                    @else
+                                        <span class="text-gray-400">Belum ada hasil</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+                                    <button @click="editId = 'kelulusan-{{ $student->id }}'" class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500">Edit</button>
+                                    <form action="{{ route('scores.destroy', $s) }}" method="POST" onsubmit="return confirm('Yakin hapus?')" style="display:inline">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Hapus</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr x-show="editId === 'kelulusan-{{ $student->id }}'" style="display: none;">
+                                <td colspan="5" class="bg-gray-50 px-6 py-4">
+                                    <form action="{{ route('scores.update', $s) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-center">
+                                        @csrf
+                                        @method('PUT')
+                                        <select name="student_id" class="border rounded px-3 py-2" required>
+                                            @foreach($students as $student)
+                                                <option value="{{ $student->id }}" @if($student->id == $s->student_id) selected @endif>{{ $student->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <select name="criterion_id" class="border rounded px-3 py-2" required>
+                                            @foreach($criteria as $c)
+                                                <option value="{{ $c->id }}" @if($c->id == $s->criterion_id) selected @endif>{{ $c->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="number" name="value" value="{{ $s->value }}" class="border rounded px-3 py-2" min="0" max="100" required>
+                                        <div class="flex gap-2">
+                                            <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Simpan</button>
+                                            <button type="button" @click="editId = null" class="px-4 py-2 rounded bg-gray-300 text-gray-700 hover:bg-gray-400">Batal</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr><td colspan="4">Tidak ada data siswa.</td></tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+<script src="//unpkg.com/alpinejs" defer></script>
 @endsection

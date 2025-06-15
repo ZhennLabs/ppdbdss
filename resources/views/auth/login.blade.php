@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - PPDB SMA</title>
+    <title>Login - PPDB SMP Perintis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@
         <div class="flex justify-center mb-6">
             <img src="{{ asset('assets/images/dinasPendLogo.png') }}" alt="PPDB Logo" class="h-16 w-16">
         </div>
-        <h2 class="text-2xl font-semibold text-blue-900 text-center mb-6">Login - PPDB SMA</h2>
+        <h2 class="text-2xl font-semibold text-blue-900 text-center mb-6">Login - PPDB SMP Perintis</h2>
 
         <form action="{{ route('login.submit') }}" method="POST">
             @csrf

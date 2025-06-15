@@ -36,8 +36,8 @@
 @endsection
 
 @section('content')
-    <h2 class="text-2xl font-bold text-blue-900 mb-4">Selamat Datang di PPDB SMA</h2>
-    <p class="text-gray-700 mb-6">Penerimaan Peserta Didik Baru (PPDB) adalah platform resmi untuk pendaftaran siswa baru SMA di Indonesia. Pastikan Anda mengikuti langkah-langkah berikut untuk mendaftar:</p>
+    <h2 class="text-2xl font-bold text-blue-900 mb-4">Selamat Datang di PPDB SMP Perintis Depok</h2>
+    <p class="text-gray-700 mb-6">Penerimaan Peserta Didik Baru (PPDB) adalah platform resmi untuk pendaftaran siswa baru SMP Perintis Depok. Pastikan Anda mengikuti langkah-langkah berikut untuk mendaftar:</p>
     <ul class="list-disc list-inside mb-6 text-gray-700">
         <li>Siapkan dokumen yang diperlukan seperti akta kelahiran, kartu keluarga, dan raport.</li>
         <li>Isi formulir pendaftaran melalui menu di sisi kiri.</li>
@@ -46,7 +46,7 @@
     </ul>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-blue-100 p-4 rounded-lg shadow">
-            <h3 class="text-lg font-semibold text-blue-900">Jadwal PPDB SMA</h3>
+            <h3 class="text-lg font-semibold text-blue-900">Jadwal PPDB SMP</h3>
             <p class="text-gray-700 mt-2">Tanggal: 15-30 Juni 2025</p>
         </div>
         <div class="bg-blue-100 p-4 rounded-lg shadow">
