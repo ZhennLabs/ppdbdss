@@ -224,7 +224,6 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap flex gap-2">
-                                    <button @click="editId = 'kelulusan-{{ $student->id }}'" class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500">Edit</button>
                                     <form action="{{ route('scores.destroy', $s) }}" method="POST" onsubmit="return confirm('Yakin hapus?')" style="display:inline">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Hapus</button>
