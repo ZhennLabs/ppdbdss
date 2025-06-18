@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="font-sans bg-gray-100">
+<body class="font-['Poppins'] bg-gray-100">
     <!-- Sidebar -->
-    <div class="fixed top-0 left-0 h-full w-20 bg-gradient-to-b from-blue-800 to-blue-500 transform -translate-x-full transition-all duration-500 ease-in-out z-50 sidebar overflow-hidden" id="sidebar">
+    <div class="fixed top-0 left-0 h-full w-20 bg-blue-900 transform -translate-x-full transition-all duration-500 ease-in-out z-50 sidebar overflow-hidden" id="sidebar">
         <div class="flex items-center justify-center p-4 border-b border-white/20">
             <img src="{{ asset('assets/images/dinasPendLogo.png') }}" alt="PPDB Logo" class="h-10 w-10">
         </div>
@@ -154,7 +154,7 @@
                     <p class="text-sm text-gray-600 mt-2 text-center">Progres Form : <span id="progressPercentage">0</span>%</p>
                 </div>
 
-                <form id="ppdbForm" action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="registrationForm">
+                <form id="registrationForm" action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
                     <!-- Section Content -->
@@ -376,7 +376,7 @@
         <!-- Footer -->
         <footer class="bg-blue-900 text-white mt-8 py-6">
             <div class="max-w-5xl mx-auto px-4 text-center">
-                <p>© 2025 PPDB SMP Perintis Depok - Penerimaan Peserta Didik Baru. All rights reserved.</p>
+                <p>© 2025 PPDB SMA - Penerimaan Peserta Didik Baru. All rights reserved.</p>
                 <div class="mt-4 flex justify-center gap-4">
                     <a href="#" class="text-white hover:text-sky-300"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-white hover:text-sky-300"><i class="fab fa-twitter"></i></a>
@@ -444,6 +444,10 @@
         const totalRequiredFields = allRequiredFields.length;
 
         let currentSection = 1;
+
+        // Ambil user id dari backend
+        const userId = "{{ auth()->id() }}";
+        const sectionKey = (sectionId) => `ppdb_section_${sectionId}_user_${userId}`;
 
         function updateProgress() {
             const currentSectionId = `section${currentSection}`;
@@ -558,9 +562,6 @@
                 }
             });
 
-            const userId = "{{ auth()->id() }}";
-            const sectionKey = (sectionId) => `${sectionId}_user_${userId}`;
-
             localStorage.setItem(sectionKey(sectionId), JSON.stringify(sectionData));
             alert('Data section disimpan!');
             updateProgress();
@@ -579,20 +580,15 @@
                 }
             });
 
-            const userId = "{{ auth()->id() }}";
-            const sectionKey = (sectionId) => `${sectionId}_user_${userId}`;
-
             localStorage.removeItem(sectionKey(sectionId));
             updateProgress();
         }
 
         // Load Saved Data on Page Load
-        window.addEventListener('load', () => {
+        window.addEventListener('DOMContentLoaded', () => {
             sections.forEach(section => {
                 const sectionId = section.id;
-                const userId = "{{ auth()->id() }}";
-                const sectionKey = (sectionId) => `${sectionId}_user_${userId}`;
-                const savedData = localStorage.getItem(sectionKey);
+                const savedData = localStorage.getItem(sectionKey(sectionId));
 
                 if (savedData) {
                     const sectionData = JSON.parse(savedData);
@@ -608,66 +604,8 @@
             updateProgress();
         });
 
+        // Initial progress update
         updateProgress();
-    </script>
-
-    <script>
-        // Ambil user id dari backend
-        const userId = "{{ auth()->id() }}";
-        const sectionKey = (sectionId) => `ppdb_section_${sectionId}_user_${userId}`;
-
-        // Fungsi untuk simpan data section ke localStorage
-        function saveSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            const inputs = section.querySelectorAll('input, select, textarea');
-            const sectionData = {};
-
-            inputs.forEach(input => {
-                if (input.type === 'file') {
-                    // File tidak bisa disimpan ke localStorage, hanya nama file saja
-                    sectionData[input.id] = input.files.length > 0 ? input.files[0].name : '';
-                } else {
-                    sectionData[input.id] = input.value;
-                }
-            });
-
-            localStorage.setItem(sectionKey(sectionId), JSON.stringify(sectionData));
-            alert('Data section disimpan!');
-        }
-
-        // Fungsi untuk load data section dari localStorage saat halaman dibuka
-        function loadSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            const savedData = localStorage.getItem(sectionKey(sectionId));
-            if (savedData) {
-                const sectionData = JSON.parse(savedData);
-                const inputs = section.querySelectorAll('input, select, textarea');
-                inputs.forEach(input => {
-                    if (input.type !== 'file' && sectionData[input.id] !== undefined) {
-                        input.value = sectionData[input.id];
-                    }
-                });
-            }
-        }
-
-        // Fungsi untuk reset section dan hapus dari localStorage
-        function resetSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            const inputs = section.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                if (input.type === 'file') {
-                    input.value = '';
-                } else {
-                    input.value = '';
-                }
-            });
-            localStorage.removeItem(sectionKey(sectionId));
-        }
-
-        // Saat halaman dibuka, load semua section
-        window.addEventListener('DOMContentLoaded', function() {
-            ['section1', 'section2', 'section3'].forEach(loadSection);
-        });
     </script>
 </body>
 </html>

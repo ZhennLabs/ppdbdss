@@ -47,7 +47,7 @@ class SmartCalculationService
 
                 // Simpan atau perbarui ke tabel hasil
                 $class = $this->determineClass($finalScore);
-                $isPassed = in_array($class, ['A', 'B', 'C']); // Only A/B/C is Lulus
+                $isPassed = in_array($class, ['A', 'B', 'C']); 
 
                 \Log::info("Student: {$student->name}, Score: {$finalScore}, Class: {$class}, is_passed: {$isPassed}");
 
@@ -110,7 +110,7 @@ class SmartCalculationService
         if ($score >= 90) return 'A';
         if ($score >= 80) return 'B';
         if ($score >= 70) return 'C';
-        return 'D';
+        return '-';
     }
 
     private function assignRanks()
