@@ -9,4 +9,9 @@ class Criterion extends Model
     protected $fillable = ['name', 'weight'];
 
     public $timestamps = true;
+
+    public function scores()
+    {
+        return $this->hasMany(Score::class);
+    }
 }

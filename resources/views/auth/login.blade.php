@@ -65,7 +65,7 @@
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i class="fas fa-user-circle text-blue-500"></i>
                     </span>
-                    <input type="text" name="username" id="username" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" value="{{ old('username') }}" required>
+                    <input type="text" name="username" id="username" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" value="{{ old('username') }}" >
                 </div>
             </div>
             <div class="mb-4">
@@ -74,7 +74,7 @@
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i class="fas fa-lock text-blue-500"></i>
                     </span>
-                    <input type="password" name="password" id="password" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" required>
+                    <input type="password" name="password" id="password" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" >
                 </div>
             </div>
             <button type="submit" class="w-full bg-gradient-to-r from-blue-800 to-blue-500 text-white font-medium py-2 rounded-lg hover:from-blue-900 hover:to-blue-600 transition-all duration-300">Login</button>

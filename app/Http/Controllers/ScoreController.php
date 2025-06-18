@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Score;
+use App\Models\Student;
+use App\Models\Criterion;
 use Illuminate\Http\Request;
 
 class ScoreController extends Controller
@@ -11,15 +14,8 @@ class ScoreController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $scores = Score::with(['student', 'criterion'])->get();
+        return view('admin.master-data', compact('scores'));
     }
 
     /**
@@ -27,38 +23,60 @@ class ScoreController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'criterion_id' => 'required|exists:criteria,id',
+            'value' => 'required|numeric|min:0|max:100',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        Score::updateOrCreate(
+            [
+                'student_id' => $validated['student_id'],
+                'criterion_id' => $validated['criterion_id'],
+            ],
+            [
+                'value' => $validated['value'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Nilai berhasil disimpan');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Score $score)
     {
-        //
+        $students = Student::all();
+        $criteria = Criterion::all();
+        return view('admin.master-data', compact('score', 'students', 'criteria'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Score $score)
     {
-        //
+        $validated = $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'criterion_id' => 'required|exists:criteria,id',
+            'value' => 'required|numeric|min:0|max:100',
+        ]);
+
+        $score->update($validated);
+
+        return redirect()->back()->with('success', 'Nilai berhasil diperbarui');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Score $score)
     {
-        //
+        $score->delete();
+
+        return redirect()->back()->with('success', 'Nilai berhasil dihapus');
     }
 }

@@ -66,5 +66,18 @@ Route::get('/contact', fn() => view('contact'))->name('contact');
 // =====================
 // ROUTE RESOURCE (CRUD ADMIN)
 // =====================
-Route::resource('criteria', CriterionController::class);
-Route::resource('scores', ScoreController::class);
+// Route::resource('criteria', CriterionController::class);
+// Route::resource('scores', ScoreController::class);
+
+// routes/web.php
+Route::prefix('admin')->group(function() {
+    // Kriteria
+    Route::resource('criteria', CriterionController::class);
+    
+    // Nilai
+    Route::resource('scores', ScoreController::class);
+    
+    // Kelulusan
+    Route::post('results/{result}/update-status', 'ResultController@updateStatus')
+         ->name('admin.result.updateStatus');
+});

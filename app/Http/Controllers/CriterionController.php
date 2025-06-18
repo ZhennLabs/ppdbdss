@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Criterion;
 use Illuminate\Http\Request;
 
 class CriterionController extends Controller
@@ -11,15 +12,8 @@ class CriterionController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $criteria = Criterion::all();
+        return view('admin.master-data', compact('criteria'));
     }
 
     /**
@@ -27,38 +21,47 @@ class CriterionController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:criteria,name',
+            'weight' => 'required|numeric|min:0',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        Criterion::create($validated);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return redirect()->back()
+            ->with('success', 'Kriteria berhasil ditambahkan');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Criterion $criterion)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:criteria,name,'.$criterion->id,
+            'weight' => 'required|numeric|min:0',
+        ]);
+
+        $criterion->update($validated);
+
+        return redirect()->back()
+            ->with('success', 'Kriteria berhasil diperbarui');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Criterion $criterion)
     {
-        //
+        // Cek apakah kriteria sudah digunakan di nilai siswa
+        if ($criterion->scores()->exists()) {
+            return redirect()->back()
+                ->with('error', 'Tidak dapat menghapus kriteria karena sudah digunakan');
+        }
+
+        $criterion->delete();
+
+        return redirect()->back()
+            ->with('success', 'Kriteria berhasil dihapus');
     }
 }

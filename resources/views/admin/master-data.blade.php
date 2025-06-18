@@ -26,6 +26,16 @@
         </div>
     </div>
 
+    @if ($errors->any())
+        <div class="text-red-500">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div x-show="show === 'kriteria'" class="mb-8" style="display: none;">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold">Kelola Kriteria & Bobot</h2>
@@ -101,8 +111,8 @@
                 <select name="student_id" class="border rounded px-3 py-2 w-full md:w-1/3" required>
                     <option value="">Pilih Siswa</option>
                     @foreach($students as $student)
-    <option value="{{ $student->id }}">{{ $student->name }}</option>
-@endforeach
+                        <option value="{{ $student->id }}">{{ $student->name }}</option>
+                    @endforeach
                 </select>
                 <select name="criterion_id" class="border rounded px-3 py-2 w-full md:w-1/3" required>
                     <option value="">Pilih Kriteria</option>
@@ -223,7 +233,7 @@
                                         <span class="text-gray-400">Belum ada hasil</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <form action="{{ route('scores.destroy', $s) }}" method="POST" onsubmit="return confirm('Yakin hapus?')" style="display:inline">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Hapus</button>
