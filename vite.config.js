@@ -10,4 +10,8 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    build: {
+        outDir: 'public/build', // Laravel default
+        emptyOutDir: true,
+    },
 });
