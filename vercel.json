@@ -28,7 +28,7 @@
     "APP_ENV": "production",
     "APP_DEBUG": "false",
     "APP_URL": "https://ppdbdss.vercel.app",
-    "APP_KEY": "base64:WG1JqFIrDau42QZWrZPXJ1vAdl9veci4XMxmcJBeEpA="
+    "APP_KEY": "base64:your-app-key-here"
   },
   "functions": {
     "api/index.php": {
